@@ -1,0 +1,17 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    dotenv (2.8.1)
+    sequel (5.70.0)
+    sqlite3 (1.6.3-x86_64-linux)
+
+PLATFORMS
+  x86_64-linux
+
+DEPENDENCIES
+  dotenv
+  sequel
+  sqlite3
+
+BUNDLED WITH
+   2.4.17
