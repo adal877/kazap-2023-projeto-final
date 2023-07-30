@@ -17,87 +17,74 @@ limite: 06/08 às 23h59
 ### Regra de Negócios
 #### Modelagem
 ##### shamelessly exported from dbdiagram.io :)
-```sql
-CREATE TABLE `clients` (
-  `id` integer UNIQUE PRIMARY KEY NOT NULL AUTO_INCREMENT,
-  `timestamp` DateTime NOT NULL,
-  `first_name` string NOT NULL,
-  `last_name` string NOT NULL,
-  `document` string NOT NULL
-);
 
-CREATE TABLE `accounts` (
-  `id` integer UNIQUE PRIMARY KEY NOT NULL AUTO_INCREMENT,
-  `client_id` integer NOT NULL AUTO_INCREMENT,
-  `bank_id` integer NOT NULL,
-  `address_id` integer NOT NULL,
-  `timestamp` DateTime NOT NULL,
-  `account_number` integer NOT NULL,
-  `initial_balance` integer NOT NULL
-);
+![Modelagem](https://github.com/adal877/kazap-2023-projeto-final/blob/dev/documents/images/projeto_final_modelagem.jpeg)
+<details>
+  <summary>Código em DBML</summary>
 
-CREATE TABLE `banks` (
-  `id` integer UNIQUE PRIMARY KEY NOT NULL AUTO_INCREMENT,
-  `address_id` integer UNIQUE NOT NULL,
-  `timestamp` DateTime NOT NULL,
-  `name` string NOT NULL,
-  `code` integer NOT NULL
-);
+  ```sql
+  Table clients {
+    id integer [primary key, increment, not null, unique]
+    timestamp DateTime [not null]
+    first_name string [not null]
+    last_name string [not null]
+    document string [not null]
+  }
 
-CREATE TABLE `addresses` (
-  `id` integer UNIQUE PRIMARY KEY NOT NULL AUTO_INCREMENT,
-  `timestamp` DateTime NOT NULL,
-  `street` string NOT NULL,
-  `city` string NOT NULL,
-  `number` integer NOT NULL,
-  `state` string NOT NULL,
-  `state_abbreviation` string NOT NULL
-);
+  Table accounts {
+    id integer [primary key, increment, not null, unique]
+    client_id integer [ref: > clients.id, increment, not null]
+    bank_id integer [ref: > banks.id, not null]
+    address_id integer [ref: > addresses.id, not null]
+    timestamp DateTime [not null]
+    account_number integer [not null]
+    initial_balance integer [not null]
+  }
 
-CREATE TABLE `telephones` (
-  `id` integer UNIQUE PRIMARY KEY NOT NULL AUTO_INCREMENT,
-  `timestamp` DateTime NOT NULL,
-  `number` integer NOT NULL,
-  `code_area` integer NOT NULL,
-  `is_cellphone` boolean DEFAULT true
-);
+  Table banks {
+    id integer [primary key, increment, not null, unique]
+    address_id integer [ref: < addresses.id, unique, not null]
+    timestamp DateTime [not null]
+    name string [not null]
+    code integer [not null]
+  }
 
-CREATE TABLE `client_telephones` (
-  `id` integer UNIQUE PRIMARY KEY NOT NULL AUTO_INCREMENT,
-  `client_id` integer NOT NULL,
-  `telephone_id` integer NOT NULL
-);
+  Table addresses {
+    id integer [primary key, increment, not null, unique]
+    timestamp DateTime [not null]
+    street string [not null]
+    city string [not null]
+    number integer [not null]
+    state string [not null]
+    state_abbreviation string [not null]
+  }
 
-CREATE TABLE `transactions` (
-  `id` integer PRIMARY KEY,
-  `from_account_id` integer NOT NULL,
-  `to_account_id` integer NOT NULL,
-  `timestamp` DateTime
-);
+  Table telephones {
+    id integer [primary key, increment, not null, unique]
+    timestamp DateTime [not null]
+    number integer [not null]
+    code_area integer [not null]
+    is_cellphone boolean [default: true]
+  }
 
-CREATE TABLE `transaction_type` (
-  `id` integer UNIQUE PRIMARY KEY NOT NULL,
-  `transaction_id` integer,
-  `name` string NOT NULL,
-  `code` string NOT NULL DEFAULT "P" COMMENT '[P]ix, [T]ed, [W]ithdral, [D]ebit'
-);
+  Table client_telephones {
+    id integer [primary key, increment, not null, unique]
+    client_id integer [ref: > clients.id, not null]
+    telephone_id integer [ref: > telephones.id, not null]
+  }
 
-ALTER TABLE `accounts` ADD FOREIGN KEY (`client_id`) REFERENCES `clients` (`id`);
+  Table transactions {
+    id integer [primary key]
+    from_account_id integer [ref: > accounts.id, not null]
+    to_account_id integer [ref: > accounts.id, not null]
+    timestamp DateTime
+  }
 
-ALTER TABLE `accounts` ADD FOREIGN KEY (`bank_id`) REFERENCES `banks` (`id`);
-
-ALTER TABLE `accounts` ADD FOREIGN KEY (`address_id`) REFERENCES `addresses` (`id`);
-
-ALTER TABLE `addresses` ADD FOREIGN KEY (`id`) REFERENCES `banks` (`address_id`);
-
-ALTER TABLE `client_telephones` ADD FOREIGN KEY (`client_id`) REFERENCES `clients` (`id`);
-
-ALTER TABLE `client_telephones` ADD FOREIGN KEY (`telephone_id`) REFERENCES `telephones` (`id`);
-
-ALTER TABLE `transactions` ADD FOREIGN KEY (`from_account_id`) REFERENCES `accounts` (`id`);
-
-ALTER TABLE `transactions` ADD FOREIGN KEY (`to_account_id`) REFERENCES `accounts` (`id`);
-
-ALTER TABLE `transaction_type` ADD FOREIGN KEY (`transaction_id`) REFERENCES `transactions` (`id`);
-
-```
+  Table transaction_type {
+    id integer [primary key, not null, unique]
+    transaction_id integer [ref: > transactions.id]
+    name string [not null]
+    code string [default: "P", not null, note: "[P]ix, [T]ed, [W]ithdral, [D]ebit"]
+  }
+  ```
+</details>
