@@ -3,6 +3,7 @@
 # Client model
 class Client < Sequel::Model
   plugin :validation_helpers
+
   def validate
     super
     validates_presence %i[first_name last_name document date_birth]

@@ -10,7 +10,7 @@ Sequel.migration do
       DateTime    :created_at, default: Sequel::CURRENT_TIMESTAMP, null: false
       String      :email
       Integer     :account_number, null: false
-      Integer     :initial_balance, null: false
+      Integer     :initial_balance, default: 0
     end
   end
 end
