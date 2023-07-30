@@ -191,3 +191,34 @@ devedor e a taxa de juros acumulada;
 - Adicione as informações de saldo devedor e taxa de juros acumulada até o
 momento, na funcionalidade de consulta de saldo;
 </details>
+
+<details>
+<summary>Automações e outros...</summary>
+
+## Ambiente
+<details>
+<summary>Gerando migrations</summary>
+
+##### Para facilitar a criação dos arquivos de migration eu criei um script em bash
+```bash
+#!/bin/env bash
+
+gen_migration() {
+	for i in ${@}; do
+		local mig_code="$(date +%s)"
+		local file_name="${mig_code}_create_${i}.rb"
+		touch "${file_name}" && echo "${file_name}: DONE" || echo "${file_name}: FAILED"
+		sleep 1
+	done
+}
+```
+#### Utilização:
+```bash
+# Array com os nomes dos arquivos/models
+migrations=("accounts" "clients" "telephones" "clients_telephones" "transactions" "addresses" "transaction_types" "banks")
+
+# Chamando a função
+gen_migration $migrations
+```
+</details>
+</details>
