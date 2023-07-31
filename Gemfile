@@ -3,6 +3,7 @@
 source 'https://rubygems.org'
 
 gem 'dotenv'
+gem 'faker'
 gem 'logger'
 gem 'sequel'
 gem 'sqlite3'
