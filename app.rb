@@ -3,6 +3,9 @@
 require 'sequel'
 require 'dotenv'
 
+# Load environment variables from .env file
+Dotenv.load
+
 DB_PATH = ENV['DB_LOCATION']
 DB_NAME = ENV['DB_NAME']
 
