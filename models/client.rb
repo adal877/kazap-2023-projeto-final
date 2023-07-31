@@ -4,6 +4,8 @@
 class Client < Sequel::Model
   plugin :validation_helpers
 
+  self.raise_on_save_failure = true
+
   def validate
     super
     validates_presence %i[first_name last_name document date_birth]

@@ -5,6 +5,8 @@ class Bank < Sequel::Model
   plugin :validation_helpers
   one_to_one :address
 
+  self.raise_on_save_failure = true
+
   def validate
     super
     validates_presence %i[address_id name full_name code ispb]

@@ -7,7 +7,7 @@ Sequel.migration do
       DateTime :created_at, default: Sequel::CURRENT_TIMESTAMP, null: false
       String   :street, null: false
       String   :city, null: false
-      Integer  :number, null: false
+      String   :number, null: false
       String   :state, null: false
       String   :state_abbreviation, null: false
     end

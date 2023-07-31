@@ -4,6 +4,10 @@ require 'faker'
 
 require_relative 'dependencies'
 
+# Enable query logging
+# By default, uses DEBUG for seed.
+Sequel.sqlite("#{DB_PATH}/#{DB_NAME}").loggers << Logger.new(Logger::DEBUG)
+
 SEED_RECORDS_AMOUNT = ENV['SEED_RECORDS_AMOUNT'].to_i
 
 begin
@@ -20,11 +24,11 @@ begin
   # Seed data for addresses table
   SEED_RECORDS_AMOUNT.times do
     Address.create(
-      street: Faker::Address.street_address,
-      city: Faker::Address.city,
-      number: Faker::Address.building_number.to_i,
-      state: Faker::Address.state,
-      state_abbreviation: Faker::Address.state_abbr
+      street: Faker::Address.street_address.to_s,
+      city: Faker::Address.city.to_s,
+      number: Faker::Address.building_number,
+      state: Faker::Address.state.to_s,
+      state_abbreviation: Faker::Address.state_abbr.to_s
     )
   end
 
@@ -33,8 +37,9 @@ begin
     Bank.create(
       name: Faker::Bank.name,
       full_name: Faker::Bank.name,
-      code: Faker::Bank.swift_bic.to_i,
-      ispb: Faker::Number.number(digits: 8).to_s
+      code: Faker::Number.between(from: 1, to: 1000),
+      ispb: Faker::Number.number(digits: 8).to_s,
+      address_id: Address.order(Sequel.lit('RANDOM()')).first.id
     )
   end
 
@@ -49,7 +54,7 @@ begin
 
   # Seed data for client_telephones table
   SEED_RECORDS_AMOUNT.times do
-    ClientTelephone.create(
+    ClientsTelephones.create(
       client_id: Client.order(Sequel.lit('RANDOM()')).first.id,
       telephone_id: Telephone.order(Sequel.lit('RANDOM()')).first.id
     )
@@ -67,35 +72,36 @@ begin
     )
   end
 
+  # Seed data for transaction_type table
+  transaction_types = [
+    { code: 'P' },
+    { code: 'T' },
+    { code: 'W' }
+  ]
+
+  transaction_types.each do |type|
+    TransactionsType.create(
+      code: type[:code]
+    )
+  end
+
   # Seed data for transactions table
   SEED_RECORDS_AMOUNT.times do
     Transaction.create(
       from_account_id: Account.order(Sequel.lit('RANDOM()')).first.id,
       to_account_id: Account.order(Sequel.lit('RANDOM()')).first.id,
-      transaction_amount: BigDecimal(Faker::Number.decimal(l_digits: 3, r_digits: 2)),
-      description: Faker::Lorem.sentence
-    )
-  end
-
-  # Seed data for transaction_type table
-  transaction_types = [
-    { code: 'P' },
-    { code: 'T' },
-    { code: 'W' },
-    { code: 'D' }
-  ]
-
-  transaction_types.each do |type|
-    TransactionType.create(
-      code: type[:code]
+      transaction_type_id: TransactionsType.order(Sequel.lit('RANDOM()')).first.id,
+      transaction_amount: Faker::Number.decimal(l_digits: 3, r_digits: 2)
     )
   end
 rescue StandardError => e
+  retry if e.message == 'code is already taken'
   puts '########## Error ##########'
   puts "Message: #{e.message}"
   puts "Backtrace: #{e.backtrace}"
   p e
   puts '###########################'
 ensure
+  puts "Generated #{SEED_RECORDS_AMOUNT} record(s)"
   puts 'Seed finalized'
 end

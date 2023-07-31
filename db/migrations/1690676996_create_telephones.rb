@@ -5,9 +5,9 @@ Sequel.migration do
     create_table :telephones do
       primary_key :id
       DateTime    :created_at, default: Sequel::CURRENT_TIMESTAMP, null: false
-      Integer     :number, null: false
-      Integer     :code_area, null: false
-      Boolean     :is_cellphone, default: true
+      String     :number, null: false
+      String     :code_area, null: false
+      Boolean    :is_cellphone, default: true
     end
   end
 end

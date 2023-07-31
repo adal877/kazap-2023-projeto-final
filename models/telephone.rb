@@ -4,10 +4,10 @@
 class Telephone < Sequel::Model
   plugin :validation_helpers
 
+  self.raise_on_save_failure = true
+
   def validate
     validates_presence %i[number code_area is_cellphone]
-    validates_boolean is_cellphone
-    validates_integer code_area
-    validates_integer number
+    validates_includes [true, false], :is_cellphone, message: 'is_cellphone must be true or false'
   end
 end
