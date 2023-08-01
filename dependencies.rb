@@ -26,6 +26,7 @@ LOG_LEVEL = case ENV['LOG_LEVEL']
             end
 
 # Enable query logging
+# Sequel.sqlite(DB_PATH_NAME.to_s).loggers << Logger.new(LOG_LEVEL)
 Sequel.sqlite("#{DB_PATH}/#{DB_NAME}").loggers << Logger.new(LOG_LEVEL)
 
 require_relative 'models/account'
