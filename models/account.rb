@@ -4,26 +4,25 @@ require 'sequel'
 
 # Account model
 class Account < Sequel::Model
-  attr_accessor :db
-
   plugin :validation_helpers
 
   self.raise_on_save_failure = true
 
-  def initialize
-    super
-    @db = Sequel.sqlite('../db/bank.db')
-  end
-
   def self.accounts_as_options
-    accounts = []
-    @db[:accounts].all.each do |account|
-      accounts << {
-        value: account[:id],
-        name: account[:account_number]
-      }
+    accounts = Account.all
+    if accounts.empty?
+      puts 'Nenhum registro encontrado!'
+    else
+      accounts.each do |account|
+        accounts << {
+          value: account[:id],
+          name: account[:account_number]
+        }
+        accounts << {
+          value: -1, name: '~ Sair ~'
+        }
+      end
     end
-    accounts
   end
 
   def validate

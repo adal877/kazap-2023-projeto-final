@@ -32,7 +32,6 @@ LOG_LEVEL = case ENV['LOG_LEVEL']
 # Enable query logging
 DB = load_db("#{DB_PATH}/#{DB_NAME}")
 DB.loggers << Logger.new(LOG_LEVEL)
-p DB[:addresses]
 
 require_relative 'models/account'
 require_relative 'models/address'
@@ -42,8 +41,6 @@ require_relative 'models/clients_telephone'
 require_relative 'models/telephone'
 require_relative 'models/transaction'
 require_relative 'models/transactions_type'
-
-# DB = Sequel.sqlite('db/bank.db')
 
 def create_client
   clients_input = []
@@ -152,7 +149,6 @@ def create_record
     create_record = prompt.select('', record_options)
     case create_record
     when 1
-      addresses_input = []
       loop do
         address = Address.new
         # While it is invalid keep asking for user input
@@ -161,12 +157,14 @@ def create_record
         address.number = prompt.ask('Número: ').to_i
         address.state  = prompt.ask('Estado: ')
         # Check if the state input is valid by looking it up in the BRAZILIAN_STATES hash
-        until BRAZILIAN_STATES.key?(address.state)
+        # until BRAZILIAN_STATES.key?(address.state)
+        until case_insensitive_include?(BRAZILIAN_STATES, address.state)
           puts 'Estado inválido. Por favor, digite um estado válido.'
           address.state = prompt.ask('Estado: ')
         end
         address.state_abbreviation = BRAZILIAN_STATES[address.state]
-        (addresses_input << address) if save_record?
+        # (addresses_input << address) if save_record?
+        address.save if save_record?
 
         break if add_more?
       end
@@ -206,8 +204,13 @@ def records
     get_record = prompt.select('', record_options)
     case get_record
     when 1
-      addresses = Address.addresses_as_options(Sequel.sqlite('./db/bank.db')[:addresses])
-      prompt.select('', addresses)
+      addresses = Address.addresses_as_options
+      addresses_selected = prompt.select('', addresses)
+      puts "You selected the address with id: #{addresses_selected}"
+    when 2
+      clients = Client.clients_as_options
+      client_selected = prompt.select('', clients)
+      puts "You selected the client with id: #{client_selected}"
     else
       break
     end

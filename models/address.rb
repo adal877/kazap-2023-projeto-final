@@ -5,29 +5,22 @@ require 'sqlite3'
 
 # Address model
 class Address < Sequel::Model
-  attr_accessor :db
-
   plugin :validation_helpers
 
   self.raise_on_save_failure = true
 
-  # def initialize
-  #   super
-  #   # begin
-  #   #   @db = Sequel.sqlite('../db/bank.db')
-  #   # rescue SQLite3::CantOpenException => e
-  #   #   puts e.message
-  #   # end
-  # end
-
-  def self.addresses_as_options(addresses)
-    if addresses.all.empty?
+  def self.addresses_as_options
+    addresses = Address.all
+    if addresses.empty?
       puts 'Nenhum registro encontrado!'
     else
-      addresses.all.map do |address|
+      addresses.map do |address|
         {
           value: address[:id],
           name: "#{address[:street]}, #{address[:city]}. #{address[:number]}"
+        }
+        addresses << {
+          value: -1, name: '~ Sair ~'
         }
       end
     end

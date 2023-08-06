@@ -32,6 +32,11 @@ def load_db(path)
   end
 end
 
+def case_insensitive_include?(hash, key)
+  key_downcase = key.downcase
+  hash.keys.any? { |k| k.downcase == key_downcase }
+end
+
 def build_json(data, data_context)
   file_name = "#{data_context}_#{UUID.new.generate}.json"
   begin
