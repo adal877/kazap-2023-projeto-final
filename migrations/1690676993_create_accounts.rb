@@ -9,8 +9,8 @@ Sequel.migration do
       foreign_key :address_id, :addresses, null: false
       DateTime    :created_at, default: Sequel::CURRENT_TIMESTAMP, null: false
       String      :email
-      Integer     :account_number, null: false
-      Integer     :initial_balance, default: 0
+      String     :account_number, null: false
+      Float     :initial_balance, default: 100
     end
   end
 end

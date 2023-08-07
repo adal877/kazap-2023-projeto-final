@@ -22,6 +22,20 @@ class Bank < Sequel::Model
     records
   end
 
+  def self.make_transaction(from_id, to_id, value)
+    from_account_id = Bank[from_id]
+    to_account_id   = Bank[to_id]
+
+    if from_account_id.initial_balance < value
+      puts 'Valor da conta insuficiente'
+    elsif value.negative?
+      puts 'Valor inválido'
+    else
+      from_account_id.initial_balance -= value
+      to_account_id.initial_balance += value
+    end
+  end
+
   def validate
     super
     validates_presence %i[address_id name full_name code ispb]
