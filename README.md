@@ -1,6 +1,20 @@
 # Kazap Academy 2023
 ## Projeto **Final**
 
+### O que houve durante o processo?
+Bom. Vamos lá...
+  Durante o desenvolvimento quase que aconteceu de tudo: fiquei sem internet, meu ssd parou de funcionar, o lid/"tampa"  
+do notebook quebrou... fora outros acontecidos...  
+  Com todos os percausos dei continuidade com o projeto lendo a documentação pelo smartphone e fazendo pesquisas em fóruns.  
+No final o desenvolvimento acabou por não ser simples mas foi interessante. Interessante em termos de estudo de uma linguagem  
+que eu recém aprendi, interessante em termos de análise das lógicas de negócio necessárias e principalmente em termos  
+de aprendizagem de criar uma aplicação com sequel e sqlite para utilização via **terminal**.
+
+  Infelizmente não consegui terminar a tempo para implementar a **atualização de contas** e outras regras necessárias, mas fico feliz  
+de entregar o projeto e de ter me mente tudo o que aprendi durante o desenvolvimento.
+
+  Agradeço muito à equipe da Kazap pelos ensinamentos e atenção durante o kazap-academy. Com certeza darei continuidade aos estudos  
+com ruby e me aprofundarei em outras tecnologias :)
 
 # Projeto
 ### Proposta
@@ -21,6 +35,7 @@ limite: 06/08 às 23h59
 ![Modelagem](https://github.com/adal877/kazap-2023-projeto-final/blob/dev/documents/images/projeto_final_modelagem.jpeg)
 <details>
   <summary>Código em DBML</summary>
+  ![Código fonte + models](https://dbdiagram.io/d/64c53bae02bd1c4a5ee83b7c)
 
   ```sql
   Table clients {
