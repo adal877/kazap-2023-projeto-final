@@ -1,0 +1,4 @@
+# Set the TargetRubyVersion to the desired Ruby version
+# For example, for Ruby 2.7.2:
+AllCops:
+  TargetRubyVersion: 3.1.2

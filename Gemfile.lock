@@ -1,17 +1,47 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    concurrent-ruby (1.2.2)
     dotenv (2.8.1)
+    faker (3.2.0)
+      i18n (>= 1.8.11, < 2)
+    i18n (1.14.1)
+      concurrent-ruby (~> 1.0)
+    logger (1.5.3)
+    macaddr (1.7.2)
+      systemu (~> 2.6.5)
+    pastel (0.8.0)
+      tty-color (~> 0.5)
+    rainbow (3.1.1)
     sequel (5.70.0)
     sqlite3 (1.6.3-x86_64-linux)
+    systemu (2.6.5)
+    tty-color (0.6.0)
+    tty-cursor (0.7.1)
+    tty-prompt (0.23.1)
+      pastel (~> 0.8)
+      tty-reader (~> 0.8)
+    tty-reader (0.9.0)
+      tty-cursor (~> 0.7)
+      tty-screen (~> 0.8)
+      wisper (~> 2.0)
+    tty-screen (0.8.1)
+    uuid (2.3.9)
+      macaddr (~> 1.0)
+    wisper (2.0.1)
 
 PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
   dotenv
+  faker
+  logger
+  rainbow
   sequel
   sqlite3
+  tty-prompt
+  uuid
 
 BUNDLED WITH
    2.4.17
