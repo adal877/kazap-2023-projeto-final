@@ -151,7 +151,6 @@ def create_record
     when 1
       loop do
         address = Address.new
-        # While it is invalid keep asking for user input
         address.street = prompt.ask('Rua: ')
         address.city   = prompt.ask('Cidade: ')
         address.number = prompt.ask('Número: ').to_i
@@ -163,7 +162,6 @@ def create_record
           address.state = prompt.ask('Estado: ')
         end
         address.state_abbreviation = BRAZILIAN_STATES[address.state]
-        # (addresses_input << address) if save_record?
         address.save if save_record?
 
         break if add_more?

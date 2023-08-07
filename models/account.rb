@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'sequel'
+require 'uuid'
 
 # Account model
 class Account < Sequel::Model
@@ -9,23 +10,26 @@ class Account < Sequel::Model
   self.raise_on_save_failure = true
 
   def self.accounts_as_options
-    accounts = Account.all
-    if accounts.empty?
-      puts 'Nenhum registro encontrado!'
-    else
-      accounts.each do |account|
-        accounts << {
-          value: account[:id],
-          name: account[:account_number]
-        }
-        accounts << {
-          value: -1, name: '~ Sair ~'
-        }
-      end
+    records = []
+    Account.all.each do |account|
+      records << {
+        value: account[:id],
+        name: "Number: #{account[:account_number]}. Balance: #{account[:initial_balance]}"
+      }
     end
+    records << {
+      value: -1, name: '~ Sair ~'
+    }
+    records
   end
 
   def validate
-    validates_presence %i[client_id bank_id address_id account_number]
+    validates_presence %i[client_id bank_id address_id email]
+    validates_unique :email
+  end
+
+  def before_create
+    self.account_number = UUID.new.generate
+    super
   end
 end

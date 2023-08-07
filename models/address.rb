@@ -10,20 +10,17 @@ class Address < Sequel::Model
   self.raise_on_save_failure = true
 
   def self.addresses_as_options
-    addresses = Address.all
-    if addresses.empty?
-      puts 'Nenhum registro encontrado!'
-    else
-      addresses.map do |address|
-        {
-          value: address[:id],
-          name: "#{address[:street]}, #{address[:city]}. #{address[:number]}"
-        }
-        addresses << {
-          value: -1, name: '~ Sair ~'
-        }
-      end
+    records = []
+    Address.all.each do |address|
+      records << {
+        value: address[:id],
+        name: "#{address[:street]}, #{address[:city]}. #{address[:number]}"
+      }
     end
+    records << {
+      value: -1, name: '~ Sair ~'
+    }
+    records
   end
 
   def validate

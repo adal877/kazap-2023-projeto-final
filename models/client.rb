@@ -1,27 +1,27 @@
 # frozen_string_literal: true
 
+require 'sequel'
+require 'sqlite3'
+
 # Client model
 class Client < Sequel::Model
-  attr_accessor :db
-
   plugin :validation_helpers
 
   self.raise_on_save_failure = true
 
-  def initialize
-    super
-    @db = Sequel.sqlite('../db/bank.db')
-  end
-
   def self.clients_as_options
-    clients = []
-    @db[:clients].all.each do |client|
-      clients << {
-        value: client[:id],
-        name: "#{client[:first_name]}, #{client[:last_name]}"
+    records = []
+    Client.all.each do |client|
+      records << {
+        value: client[:id].to_i,
+        name: "#{client[:first_name]} #{client[:last_name]}, #{client[:document]}"
       }
     end
-    clients
+    records << {
+      value: -1,
+      name: '~ Sair ~'
+    }
+    records
   end
 
   def validate

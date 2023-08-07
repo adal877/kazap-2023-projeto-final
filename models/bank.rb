@@ -2,27 +2,24 @@
 
 # Bank model
 class Bank < Sequel::Model
-  attr_accessor :db
-
   plugin :validation_helpers
   one_to_one :address
 
   self.raise_on_save_failure = true
 
-  def initialize
-    super
-    @db = Sequel.sqlite('../db/bank.db')
-  end
-
   def self.banks_as_options
-    banks = []
-    @db[:banks].all.each do |bank|
-      banks << {
-        value: bank[:id],
+    records = []
+    Bank.all.each do |bank|
+      records << {
+        value: bank[:id].to_i,
         name: "#{bank[:full_name]}. #{bank[:ispb]}"
       }
     end
-    banks
+    records << {
+      value: -1,
+      name: '~ Sair ~'
+    }
+    records
   end
 
   def validate
