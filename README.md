@@ -237,3 +237,26 @@ gen_migration $migrations
 ```
 </details>
 </details>
+
+<details>
+<summary>Como executar o projeto?</summary>
+
+Instale as dependências
+```bash
+$ bundle install
+```
+Em caso de erro com o sequel, instale-o diretamente utilizando ```gem```
+```bash
+$ gem install sequel
+```
+
+Depois de instalado todas as dependências, execute o comando a baixo para gerar o banco de dados
+```bash
+$ sequel -m migrations sqlite://db/bank.db
+```
+
+Agora é só executarmos :D
+```bash
+$ ruby app.rb
+```
+</details>
