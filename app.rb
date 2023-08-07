@@ -157,7 +157,7 @@ class UI
   def export_transactions
     loop do
       clear
-      action = @prompt.select('Qual formato gostaria de exportar?')
+      action = @prompt.select('Qual formato gostaria de exportar?', @export_transactions_options)
       transaction = view_user_transactions_detailed
       case action
       when :csv
